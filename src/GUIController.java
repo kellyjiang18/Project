@@ -1,20 +1,13 @@
-import javax.imageio.ImageIO;
 import javax.swing.JFrame;
-import javax.swing.ImageIcon;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.JTextArea;
 import javax.swing.JButton;
 import java.awt.BorderLayout;
-import java.awt.Image;
-import java.awt.Color;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.net.URL;
 
 public class GUIController implements ActionListener
 {
@@ -28,31 +21,9 @@ public class GUIController implements ActionListener
         playerScore = new JTextArea(5,5);
         dealerScore = new JTextArea(5,5);
         ansEntryField = new JTextField();
-        setupGui();
         setUpGui2();
+        setupGui();
     }
-
-
-public void setupGui()
-{
-    JFrame frame = new JFrame("Blackjack Start");
-    frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-    JPanel entryPanel = new JPanel();
-    JLabel questionLabel = new JLabel("How many decks?");
-    ansEntryField = new JTextField(10);
-    JButton enterButton = new JButton("Enter");
-    entryPanel.add(questionLabel);
-    entryPanel.add(ansEntryField);
-    entryPanel.add(enterButton);
-    frame.add(entryPanel,BorderLayout.SOUTH);
-
-    enterButton.addActionListener(this);
-    enterButton.addActionListener(e -> {frame.dispose();});
-
-    frame.pack();
-    frame.setVisible(true);
-}
 
 public void setUpGui2()
 {
@@ -82,7 +53,26 @@ public void setUpGui2()
     game.pack();
     game.setVisible(true);
 }
+    public void setupGui()
+    {
+        JFrame frame = new JFrame("Blackjack Start");
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        JPanel entryPanel = new JPanel();
+        JLabel questionLabel = new JLabel("How many decks?");
+        ansEntryField = new JTextField(10);
+        JButton enterButton = new JButton("Enter");
+        entryPanel.add(questionLabel);
+        entryPanel.add(ansEntryField);
+        entryPanel.add(enterButton);
+        frame.add(entryPanel,BorderLayout.SOUTH);
+
+        enterButton.addActionListener(this);
+        enterButton.addActionListener(e -> {frame.dispose();});
+
+        frame.pack();
+        frame.setVisible(true);
+    }
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) (e.getSource());
         String text = button.getText();
@@ -94,11 +84,28 @@ public void setUpGui2()
         else if(text.equals("Hit")){
             api.drawCard();
             playerScore.setText("Player Score: "+api.getScore());
+            if(api.getPlayerBust())
+            {
+                playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");
+            }
         }
         else if(text.equals("Stay")){
             api.dealerDrawCard();
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
+            if(api.getDealerBust())
+            {
+                dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");
+            }
+            else if(!api.getDealerBust()&&!api.getDealerBust())
+            {
+                if(api.getScore()>api.getDealerScore())
+                {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
+                else if(api.getScore()<api.getDealerScore())
+                {dealerScore.setText("The dealer won! They got a score of "+api.getDealerScore()+" while you got a score of "+api.getScore());}
+                else
+                {playerScore.setText("Tie! Score of "+api.getScore());
+                dealerScore.setText("Tie! Score of "+api.getDealerScore());}
+            }
         }
     }
 }
-
