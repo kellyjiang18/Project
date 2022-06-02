@@ -9,7 +9,6 @@ public class BlackJackAPI
     private String deck_id;
     private int score=0;
     private int dealerScore=0;
-    private boolean gameEnd=false;
     private boolean playerBust=false;
     private boolean dealerBust=false;
 
@@ -169,12 +168,8 @@ public class BlackJackAPI
         {dealerBust=true;}
     }
 
-    public String getDeck_Id()
-    {
-        return deck_id;
-    }
-
     public int getScore() {return score;}
     public int getDealerScore() {return dealerScore;}
-    public boolean getGameEnd() {return gameEnd;}
+    public boolean getPlayerBust() {return playerBust;}
+    public boolean getDealerBust() {return dealerBust;}
 }
