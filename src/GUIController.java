@@ -31,24 +31,27 @@ public void setUpGui2()
     game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
     JPanel midPanel = new JPanel();
-    playerScore.setText("Player score: ");
+    playerScore.setText("Player Score: ");
     playerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
     playerScore.setWrapStyleWord(true);
     playerScore.setLineWrap(true);
     midPanel.add(playerScore);
-    dealerScore.setText("Dealer score: ");
+    dealerScore.setText("Dealer Score: ");
     dealerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
     dealerScore.setWrapStyleWord(true);
     dealerScore.setLineWrap(true);
     midPanel.add(dealerScore);
     JButton hitButton = new JButton("Hit");
     JButton stayButton = new JButton("Stay");
+    JButton resetButton = new JButton("Reset");
     midPanel.add(hitButton);
     midPanel.add(stayButton);
+    midPanel.add(resetButton);
     game.add(midPanel,BorderLayout.SOUTH);
 
     hitButton.addActionListener(this);
     stayButton.addActionListener(this);
+    resetButton.addActionListener(this);
 
     game.pack();
     game.setVisible(true);
@@ -92,7 +95,11 @@ public void setUpGui2()
         else if(text.equals("Stay")){
             api.dealerDrawCard();
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
-            if(api.getDealerBust())
+            if(api.getDealerBust()&&!api.getPlayerBust())
+            {
+                playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());
+            }
+            else if(api.getDealerBust())
             {
                 dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");
             }
@@ -100,12 +107,17 @@ public void setUpGui2()
             {
                 if(api.getScore()>api.getDealerScore())
                 {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
-                else if(api.getScore()<api.getDealerScore())
+                else if(api.getScore()<api.getDealerScore()||api.getDealerScore()==21)
                 {dealerScore.setText("The dealer won! They got a score of "+api.getDealerScore()+" while you got a score of "+api.getScore());}
                 else
                 {playerScore.setText("Tie! Score of "+api.getScore());
                 dealerScore.setText("Tie! Score of "+api.getDealerScore());}
             }
+        }
+        else if(text.equals("Reset")){
+            api.reset();
+            playerScore.setText("Player Score: "+api.getScore());
+            dealerScore.setText("Dealer Score: "+api.getDealerScore());
         }
     }
 }
