@@ -26,10 +26,8 @@ public class BlackJackAPI
             String deck_id=response.body().substring(response.body().indexOf("deck_id")+11,response.body().indexOf("deck_id")+23);
             System.out.println("deck_id: "+deck_id);
             this.deck_id=deck_id;
-
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
+        catch (Exception e) {System.out.println(e.getMessage());}
     }
 
     public void drawCard()
@@ -57,18 +55,14 @@ public class BlackJackAPI
                     Scanner s = new Scanner(System.in);
                     value = s.nextInt();
                 }
-                else
-                {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
+                else {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
                 addScore(value);
                 System.out.println(score);
                 setPlayerBust();
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
+            catch (Exception e) {System.out.println(e.getMessage());}
         }
-        else{
-            System.out.println("Game over, you went over 21!");
-        }
+        else {System.out.println("Game over, you went over 21!");}
     }
 
     public void dealerDrawCard()
@@ -96,18 +90,14 @@ public class BlackJackAPI
                     {
                         if(dealerScore==10)
                         {dealerAddScore(11);}
-                        else
-                        {dealerAddScore(1);}
+                        else {dealerAddScore(1);}
                     }
-                    else
-                    {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
+                    else {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
                     dealerAddScore(value);
                     System.out.println(dealerScore);
                     setDealerBust();
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
                 }
+                catch (Exception e) {System.out.println(e.getMessage());}
             }
         }
         else
@@ -133,25 +123,20 @@ public class BlackJackAPI
                     {
                         if(dealerScore==10)
                         {dealerAddScore(11);}
-                        else
-                        {dealerAddScore(1);}
+                        else {dealerAddScore(1);}
                     }
                     else
                     {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
                     dealerAddScore(value);
                     System.out.println(dealerScore);
                     setDealerBust();
-
-                } catch (Exception e) {
-                    System.out.println(e.getMessage());
                 }
+                catch (Exception e) {System.out.println(e.getMessage());}
             }
         }
-
     }
 
     public void addScore(int points) {score+=points;}
-
     public void dealerAddScore(int points) {dealerScore+=points;}
 
     private void setPlayerBust()
