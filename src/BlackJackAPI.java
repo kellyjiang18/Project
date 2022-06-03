@@ -150,11 +150,9 @@ public class BlackJackAPI
 
     }
 
-    public void addScore(int points)
-    {score+=points;}
+    public void addScore(int points) {score+=points;}
 
-    public void dealerAddScore(int points)
-    {dealerScore+=points;}
+    public void dealerAddScore(int points) {dealerScore+=points;}
 
     private void setPlayerBust()
     {
@@ -166,6 +164,14 @@ public class BlackJackAPI
     {
         if(dealerScore>21)
         {dealerBust=true;}
+    }
+
+    public void reset()
+    {
+        score=0;
+        dealerScore=0;
+        playerBust=false;
+        dealerBust=false;
     }
 
     public int getScore() {return score;}
