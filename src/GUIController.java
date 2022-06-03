@@ -56,6 +56,7 @@ public void setUpGui2()
     game.pack();
     game.setVisible(true);
 }
+
     public void setupGui()
     {
         JFrame frame = new JFrame("Blackjack Start");
@@ -76,6 +77,7 @@ public void setUpGui2()
         frame.pack();
         frame.setVisible(true);
     }
+    
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) (e.getSource());
         String text = button.getText();
@@ -88,21 +90,15 @@ public void setUpGui2()
             api.drawCard();
             playerScore.setText("Player Score: "+api.getScore());
             if(api.getPlayerBust())
-            {
-                playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");
-            }
+            {playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");}
         }
         else if(text.equals("Stay")){
             api.dealerDrawCard();
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
             if(api.getDealerBust()&&!api.getPlayerBust())
-            {
-                playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());
-            }
+            {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
             else if(api.getDealerBust())
-            {
-                dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");
-            }
+            {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
             else if(!api.getDealerBust()&&!api.getDealerBust())
             {
                 if(api.getScore()>api.getDealerScore())
