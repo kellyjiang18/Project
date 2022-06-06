@@ -1,13 +1,11 @@
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.JTextArea;
-import javax.swing.JButton;
-import java.awt.BorderLayout;
-import java.awt.Font;
+import javax.imageio.ImageIO;
+import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.net.URL;
 
 public class GUIController implements ActionListener
 {
@@ -15,6 +13,10 @@ public class GUIController implements ActionListener
     private BlackJackAPI api;
     private JTextArea playerScore;
     private JTextArea dealerScore;
+    private JFrame playerCards = new JFrame("Player Cards");
+    private JFrame dealerCards = new JFrame("Dealer Cards");
+    private Container playerPane = playerCards.getContentPane();
+    private Container dealerPane = dealerCards.getContentPane();
 
     public GUIController()
     {
@@ -25,37 +27,37 @@ public class GUIController implements ActionListener
         setupGui();
     }
 
-public void setUpGui2()
-{
-    JFrame game = new JFrame("Blackjack Game!");
-    game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    public void setUpGui2()
+    {
+        JFrame game = new JFrame("Blackjack Game!");
+        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-    JPanel midPanel = new JPanel();
-    playerScore.setText("Player Score: ");
-    playerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
-    playerScore.setWrapStyleWord(true);
-    playerScore.setLineWrap(true);
-    midPanel.add(playerScore);
-    dealerScore.setText("Dealer Score: ");
-    dealerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
-    dealerScore.setWrapStyleWord(true);
-    dealerScore.setLineWrap(true);
-    midPanel.add(dealerScore);
-    JButton hitButton = new JButton("Hit");
-    JButton stayButton = new JButton("Stay");
-    JButton resetButton = new JButton("Reset");
-    midPanel.add(hitButton);
-    midPanel.add(stayButton);
-    midPanel.add(resetButton);
-    game.add(midPanel,BorderLayout.SOUTH);
+        JPanel midPanel = new JPanel();
+        playerScore.setText("Player Score: ");
+        playerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
+        playerScore.setWrapStyleWord(true);
+        playerScore.setLineWrap(true);
+        midPanel.add(playerScore);
+        dealerScore.setText("Dealer Score: ");
+        dealerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
+        dealerScore.setWrapStyleWord(true);
+        dealerScore.setLineWrap(true);
+        midPanel.add(dealerScore);
+        JButton hitButton = new JButton("Hit");
+        JButton stayButton = new JButton("Stay");
+        JButton resetButton = new JButton("Reset");
+        midPanel.add(hitButton);
+        midPanel.add(stayButton);
+        midPanel.add(resetButton);
+        game.add(midPanel,BorderLayout.SOUTH);
 
-    hitButton.addActionListener(this);
-    stayButton.addActionListener(this);
-    resetButton.addActionListener(this);
+        hitButton.addActionListener(this);
+        stayButton.addActionListener(this);
+        resetButton.addActionListener(this);
 
-    game.pack();
-    game.setVisible(true);
-}
+        game.pack();
+        game.setVisible(true);
+    }
 
     public void setupGui()
     {
@@ -77,7 +79,42 @@ public void setUpGui2()
         frame.pack();
         frame.setVisible(true);
     }
-    
+
+
+    public void setPlayerCards()
+    {
+            try {
+                URL imageURL = new URL(api.getImageURL());
+                BufferedImage image = ImageIO.read(imageURL);
+                playerCards.repaint();
+                playerCards.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+                JLabel cardImage = new JLabel(new ImageIcon(image));
+                playerPane.setLayout(new BoxLayout(playerPane, BoxLayout.X_AXIS));
+                playerPane.add(cardImage);
+                playerPane.setVisible(true);
+                playerCards.setVisible(true);
+            } catch (IOException k) {
+                System.out.println(k.getMessage());
+            }
+    }
+
+    public void setDealerCards()
+    {
+        try {
+            URL imageURL = new URL(api.getImageURL());
+            BufferedImage image = ImageIO.read(imageURL);
+            dealerCards.repaint();
+            dealerCards.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+            JLabel cardImage = new JLabel(new ImageIcon(image));
+            dealerPane.setLayout(new BoxLayout(dealerPane, BoxLayout.X_AXIS));
+            dealerPane.add(cardImage);
+            dealerPane.setVisible(true);
+            dealerCards.setVisible(true);
+        } catch (IOException k) {
+            System.out.println(k.getMessage());
+        }
+    }
+
     public void actionPerformed(ActionEvent e) {
         JButton button = (JButton) (e.getSource());
         String text = button.getText();
@@ -88,6 +125,7 @@ public void setUpGui2()
         }
         else if(text.equals("Hit")){
             api.drawCard();
+            setPlayerCards();
             playerScore.setText("Player Score: "+api.getScore());
             if(api.getPlayerBust())
             {playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");}
@@ -107,13 +145,15 @@ public void setUpGui2()
                 {dealerScore.setText("The dealer won! They got a score of "+api.getDealerScore()+" while you got a score of "+api.getScore());}
                 else
                 {playerScore.setText("Tie! Score of "+api.getScore());
-                dealerScore.setText("Tie! Score of "+api.getDealerScore());}
+                    dealerScore.setText("Tie! Score of "+api.getDealerScore());}
             }
         }
         else if(text.equals("Reset")){
             api.reset();
             playerScore.setText("Player Score: "+api.getScore());
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
+            playerPane.removeAll();
+            playerCards.repaint();
         }
     }
 }
