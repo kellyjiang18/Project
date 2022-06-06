@@ -11,6 +11,7 @@ public class BlackJackAPI
     private int dealerScore=0;
     private boolean playerBust=false;
     private boolean dealerBust=false;
+    private String imageURL="";
 
     public BlackJackAPI(int deck_count) //creates a new game of BlackJack
     {
@@ -59,6 +60,8 @@ public class BlackJackAPI
                 addScore(value);
                 System.out.println(score);
                 setPlayerBust();
+                imageURL=response.body().substring(response.body().indexOf("image")+9,response.body().indexOf("images")-4);
+                System.out.println("Image URL: "+imageURL);
             }
             catch (Exception e) {System.out.println(e.getMessage());}
         }
@@ -163,4 +166,5 @@ public class BlackJackAPI
     public int getDealerScore() {return dealerScore;}
     public boolean getPlayerBust() {return playerBust;}
     public boolean getDealerBust() {return dealerBust;}
+    public String getImageURL() {return imageURL;}
 }
