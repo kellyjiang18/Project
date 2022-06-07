@@ -154,7 +154,6 @@ public class GUIController implements ActionListener
             playerCards.repaint();
             dealerPane.removeAll();
             dealerPane.repaint();
-            api.clearArray();
         }
     }
 }
