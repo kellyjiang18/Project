@@ -94,8 +94,7 @@ public class BlackJackAPI
                     {value=10;}
                     else if(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5).equals("A"))
                     {
-                        if(dealerScore==10)
-                        {dealerAddScore(11);}
+                        if(dealerScore==10) {dealerAddScore(11);}
                         else {dealerAddScore(1);}
                     }
                     else {value = Integer.parseInt(response.body().substring(response.body().indexOf("value")+9,response.body().indexOf("suit")-4));}
@@ -128,8 +127,7 @@ public class BlackJackAPI
                     {value=10;}
                     else if(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5).equals("A"))
                     {
-                        if(dealerScore==10)
-                        {dealerAddScore(11);}
+                        if(dealerScore==10) {dealerAddScore(11);}
                         else {dealerAddScore(1);}
                     }
                     else
@@ -145,18 +143,9 @@ public class BlackJackAPI
 
     public void addScore(int points) {score+=points;}
     public void dealerAddScore(int points) {dealerScore+=points;}
-
-    private void setPlayerBust()
-    {
-        if(score>21)
-        {playerBust=true;}
-    }
-
-    private void setDealerBust()
-    {
-        if(dealerScore>21)
-        {dealerBust=true;}
-    }
+    private void setPlayerBust() {if(score>21) {playerBust=true;}}
+    private void setDealerBust() {if(dealerScore>21) {dealerBust=true;}}
+    public void clearArray() {dealerCards.clear();}
 
     public void reset()
     {
@@ -172,5 +161,4 @@ public class BlackJackAPI
     public boolean getDealerBust() {return dealerBust;}
     public String getImageURL() {return imageURL;}
     public ArrayList<String> getDealerCards() {return dealerCards;}
-    public void clearArray() {dealerCards.clear();}
 }
