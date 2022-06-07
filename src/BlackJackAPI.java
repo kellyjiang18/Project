@@ -3,6 +3,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Scanner;
+import java.util.ArrayList;
 
 public class BlackJackAPI
 {
@@ -12,8 +13,9 @@ public class BlackJackAPI
     private boolean playerBust=false;
     private boolean dealerBust=false;
     private String imageURL="";
+    private ArrayList<String> dealerCards = new ArrayList<>();
 
-    public BlackJackAPI(int deck_count) //creates a new game of BlackJack
+    public BlackJackAPI(int deck_count) //creates a new deck of cards
     {
         String url="https://deckofcardsapi.com/api/deck/new/shuffle/?deck_count="+deck_count;
         try {
@@ -31,7 +33,7 @@ public class BlackJackAPI
         catch (Exception e) {System.out.println(e.getMessage());}
     }
 
-    public void drawCard()
+    public void drawCard() //draws a card for the player
     {
         if(playerBust==false)
         {
@@ -68,7 +70,7 @@ public class BlackJackAPI
         else {System.out.println("Game over, you went over 21!");}
     }
 
-    public void dealerDrawCard()
+    public void dealerDrawCard() //draws all the cards for the dealer
     {
         if(score==21)
         {
@@ -83,6 +85,7 @@ public class BlackJackAPI
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                     System.out.println(response.body());
+                    dealerCards.add(response.body().substring(response.body().indexOf("image")+9,response.body().indexOf("images")-4));
                     int value=0;
                     System.out.println(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5));
                     if(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5).equals("Q")||
@@ -116,6 +119,7 @@ public class BlackJackAPI
                     HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
                     System.out.println(response.body());
+                    dealerCards.add(response.body().substring(response.body().indexOf("image")+9,response.body().indexOf("images")-4));
                     int value=0;
                     System.out.println(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5));
                     if(response.body().substring(response.body().indexOf("code")+8,response.body().indexOf("image")-5).equals("Q")||
@@ -167,4 +171,6 @@ public class BlackJackAPI
     public boolean getPlayerBust() {return playerBust;}
     public boolean getDealerBust() {return dealerBust;}
     public String getImageURL() {return imageURL;}
+    public ArrayList<String> getDealerCards() {return dealerCards;}
+    public void clearArray() {dealerCards.clear();}
 }
