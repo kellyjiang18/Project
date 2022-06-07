@@ -145,7 +145,6 @@ public class BlackJackAPI
     public void dealerAddScore(int points) {dealerScore+=points;}
     private void setPlayerBust() {if(score>21) {playerBust=true;}}
     private void setDealerBust() {if(dealerScore>21) {dealerBust=true;}}
-    public void clearArray() {dealerCards.clear();}
 
     public void reset()
     {
@@ -153,6 +152,7 @@ public class BlackJackAPI
         dealerScore=0;
         playerBust=false;
         dealerBust=false;
+        dealerCards.clear();
     }
 
     public int getScore() {return score;}
