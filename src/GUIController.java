@@ -81,6 +81,7 @@ public class GUIController implements ActionListener
         frame.setVisible(true);
     }
 
+
     public void setPlayerCards()
     {
             try {
@@ -93,9 +94,7 @@ public class GUIController implements ActionListener
                 playerPane.add(cardImage);
                 playerPane.setVisible(true);
                 playerCards.setVisible(true);
-            } catch (IOException k) {
-                System.out.println(k.getMessage());
-            }
+            } catch (IOException k) {System.out.println(k.getMessage());}
     }
 
     public void setDealerCards()
@@ -112,9 +111,7 @@ public class GUIController implements ActionListener
             dealerPane.add(cardImage);
             dealerPane.setVisible(true);
             dealerCards.setVisible(true);
-        } catch (IOException k) {
-            System.out.println(k.getMessage());
-        }
+        } catch (IOException k) {System.out.println(k.getMessage());}
     }
 
     public void actionPerformed(ActionEvent e) {
@@ -129,19 +126,15 @@ public class GUIController implements ActionListener
             api.drawCard();
             setPlayerCards();
             playerScore.setText("Player Score: "+api.getScore());
-            if(api.getPlayerBust())
-            {playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");}
+            if(api.getPlayerBust()) {playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");}
         }
         else if(text.equals("Stay")){
             api.dealerDrawCard();
-            dealerScore.setText("Dealer Score: "+api.getDealerScore());
             setDealerCards();
-            if(api.getPlayerBust())
-            {dealerScore.setText("The dealer won since you went over 21!");}
-            else if(api.getDealerBust()&&!api.getPlayerBust())
-            {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
-            else if(api.getDealerBust())
-            {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
+            dealerScore.setText("Dealer Score: "+api.getDealerScore());
+            if(api.getPlayerBust()) {dealerScore.setText("The dealer won since you went over 21!");}
+            else if(api.getDealerBust()&&!api.getPlayerBust()) {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
+            else if(api.getDealerBust()) {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
             else if(!api.getDealerBust()&&!api.getDealerBust())
             {
                 if(api.getScore()>api.getDealerScore())
