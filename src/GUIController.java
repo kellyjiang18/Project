@@ -81,7 +81,6 @@ public class GUIController implements ActionListener
         frame.setVisible(true);
     }
 
-
     public void setPlayerCards()
     {
             try {
