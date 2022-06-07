@@ -6,6 +6,7 @@ import java.awt.event.ActionListener;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 public class GUIController implements ActionListener
 {
@@ -100,8 +101,10 @@ public class GUIController implements ActionListener
 
     public void setDealerCards()
     {
+        ArrayList<String> dealerCardsArray = api.getDealerCards();
+        for(String card:dealerCardsArray)
         try {
-            URL imageURL = new URL(api.getImageURL());
+            URL imageURL = new URL(card);
             BufferedImage image = ImageIO.read(imageURL);
             dealerCards.repaint();
             dealerCards.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
@@ -133,7 +136,10 @@ public class GUIController implements ActionListener
         else if(text.equals("Stay")){
             api.dealerDrawCard();
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
-            if(api.getDealerBust()&&!api.getPlayerBust())
+            setDealerCards();
+            if(api.getPlayerBust())
+            {dealerScore.setText("The dealer won since you went over 21!");}
+            else if(api.getDealerBust()&&!api.getPlayerBust())
             {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
             else if(api.getDealerBust())
             {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
@@ -154,6 +160,9 @@ public class GUIController implements ActionListener
             dealerScore.setText("Dealer Score: "+api.getDealerScore());
             playerPane.removeAll();
             playerCards.repaint();
+            dealerPane.removeAll();
+            dealerPane.repaint();
+            api.clearArray();
         }
     }
 }
