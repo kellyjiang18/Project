@@ -18,6 +18,7 @@ public class GUIController implements ActionListener
     private JFrame dealerCards = new JFrame("Dealer Cards");
     private Container playerPane = playerCards.getContentPane();
     private Container dealerPane = dealerCards.getContentPane();
+    private JTextField aceEntryField;
 
     public GUIController()
     {
@@ -27,39 +28,7 @@ public class GUIController implements ActionListener
         setUpGui2();
         setupGui();
     }
-
-    public void setUpGui2()
-    {
-        JFrame game = new JFrame("Blackjack Game!");
-        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-        JPanel midPanel = new JPanel();
-        playerScore.setText("Player Score: ");
-        playerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
-        playerScore.setWrapStyleWord(true);
-        playerScore.setLineWrap(true);
-        midPanel.add(playerScore);
-        dealerScore.setText("Dealer Score: ");
-        dealerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
-        dealerScore.setWrapStyleWord(true);
-        dealerScore.setLineWrap(true);
-        midPanel.add(dealerScore);
-        JButton hitButton = new JButton("Hit");
-        JButton stayButton = new JButton("Stay");
-        JButton resetButton = new JButton("Reset");
-        midPanel.add(hitButton);
-        midPanel.add(stayButton);
-        midPanel.add(resetButton);
-        game.add(midPanel,BorderLayout.SOUTH);
-
-        hitButton.addActionListener(this);
-        stayButton.addActionListener(this);
-        resetButton.addActionListener(this);
-
-        game.pack();
-        game.setVisible(true);
-    }
-
+    
     public void setupGui()
     {
         JFrame frame = new JFrame("Blackjack Start");
@@ -80,8 +49,40 @@ public class GUIController implements ActionListener
         frame.pack();
         frame.setVisible(true);
     }
+    
+    public void setUpGui2()
+    {
+        JFrame game = new JFrame("Blackjack Game!");
+        game.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
+        JPanel midPanel = new JPanel();
+        playerScore.setText("Player Score: ");
+        playerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
+        playerScore.setWrapStyleWord(true);
+        playerScore.setLineWrap(true);
+        midPanel.add(playerScore);
+        dealerScore.setText("Dealer Score: ");
+        dealerScore.setFont(new Font("Helvetica", Font.PLAIN, 16));
+        dealerScore.setWrapStyleWord(true);
+        dealerScore.setLineWrap(true);
+        midPanel.add(dealerScore);
+        JButton hitButton = new JButton("Hit");
+        JButton stayButton = new JButton("Stay");
+        JButton resetButton = new JButton("Reset");
+        aceEntryField = new JTextField();
+        midPanel.add(hitButton);
+        midPanel.add(stayButton);
+        midPanel.add(resetButton);
+        game.add(midPanel,BorderLayout.SOUTH);
 
+        hitButton.addActionListener(this);
+        stayButton.addActionListener(this);
+        resetButton.addActionListener(this);
+
+        game.pack();
+        game.setVisible(true);
+    }
+    
     public void setPlayerCards()
     {
             try {
@@ -126,25 +127,29 @@ public class GUIController implements ActionListener
             api.drawCard();
             setPlayerCards();
             playerScore.setText("Player Score: "+api.getScore());
-            if(api.getPlayerBust()) {playerScore.setText("You got "+api.getScore()+" and went over 21, its the dealer's turn!");}
+            if(api.getPlayerBust()) {playerScore.setText("You got "+api.getScore()+" and went over 21, the dealer won!");}
         }
         else if(text.equals("Stay")){
-            api.dealerDrawCard();
-            setDealerCards();
-            dealerScore.setText("Dealer Score: "+api.getDealerScore());
             if(api.getPlayerBust()) {dealerScore.setText("The dealer won since you went over 21!");}
-            else if(api.getDealerBust()&&!api.getPlayerBust()) {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
-            else if(api.getDealerBust()) {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
-            else if(!api.getDealerBust()&&!api.getDealerBust())
+            else
             {
-                if(api.getScore()>api.getDealerScore())
-                {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
-                else if(api.getScore()<api.getDealerScore()||api.getDealerScore()==21)
-                {dealerScore.setText("The dealer won! They got a score of "+api.getDealerScore()+" while you got a score of "+api.getScore());}
-                else
-                {playerScore.setText("Tie! Score of "+api.getScore());
-                    dealerScore.setText("Tie! Score of "+api.getDealerScore());}
+                api.dealerDrawCard();
+                setDealerCards();
+                dealerScore.setText("Dealer Score: "+api.getDealerScore());
+                if(api.getDealerBust()&&!api.getPlayerBust()) {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
+                else if(api.getDealerBust()) {dealerScore.setText("The dealer got "+api.getDealerScore()+", no one wins!");}
+                else if(!api.getDealerBust()&&!api.getDealerBust())
+                {
+                    if(api.getScore()>api.getDealerScore())
+                    {playerScore.setText("You won! You got a score of "+api.getScore()+" while the dealer got a score of "+api.getDealerScore());}
+                    else if(api.getScore()<api.getDealerScore()||api.getDealerScore()==21)
+                    {dealerScore.setText("The dealer won! They got a score of "+api.getDealerScore()+" while you got a score of "+api.getScore());}
+                    else
+                    {playerScore.setText("Tie! Score of "+api.getScore());
+                        dealerScore.setText("Tie! Score of "+api.getDealerScore());}
+                }
             }
+            
         }
         else if(text.equals("Reset")){
             api.reset();
